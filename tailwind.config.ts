@@ -9,25 +9,33 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        "bg-primary": "#FFFFFF",
-        "bg-dark": "#0B0F0D",
-        "accent-green": "#B6FF3C",
-        "text-primary": "#0B0F0D",
-        "text-muted": "#6B7280",
-        "border-subtle": "rgba(0,0,0,0.08)",
+        kraft: "#ECE4D3",
+        paper: "#F7F0DF",
+        ink: "#23272B",
+        stamp: "#B23A2E",
+        brass: "#9C7A3C",
+        "ticket-line": "#C8B891",
+        "muted-ink": "#6F6A5F",
+        "bg-primary": "#ECE4D3",
+        "bg-dark": "#23272B",
+        "accent-green": "#B23A2E",
+        "text-primary": "#23272B",
+        "text-muted": "#6F6A5F",
+        "border-subtle": "#C8B891",
       },
       backgroundColor: {
-        "surface-glass": "rgba(255,255,255,0.85)",
+        "surface-glass": "rgba(247,240,223,0.9)",
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
-        body: ["var(--font-body)", "sans-serif"],
+        display: ["Georgia", "serif"],
+        body: ["Arial", "Helvetica", "sans-serif"],
+        mono: ["Courier New", "monospace"],
       },
       borderRadius: {
-        "4xl": "2rem",
+        "4xl": "0.5rem",
       },
       boxShadow: {
-        floating: "0 20px 60px rgba(0,0,0,0.12)",
+        floating: "none",
       },
       transitionTimingFunction: {
         "power3-out": "cubic-bezier(0.215, 0.61, 0.355, 1)",

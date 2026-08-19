@@ -1,26 +1,12 @@
 import type { Metadata } from "next";
-import { Syne, Space_Grotesk } from "next/font/google";
 import "./globals.css";
-import SmoothScrollProvider from "@/lib/lenis-provider";
-import { ToastProvider } from "@/components/ui/toast";
-import Preloader from "@/components/preloader";
-
-const syne = Syne({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["400", "500", "600", "700", "800"],
-});
-
-const spaceGrotesk = Space_Grotesk({
-  subsets: ["latin"],
-  variable: "--font-body",
-  weight: ["300", "400", "500", "600", "700"],
-});
+import { AuthProvider } from "@/components/auth/auth-provider";
+import MotionShell from "@/components/tripmate/motion-shell";
 
 export const metadata: Metadata = {
-  title: "Movade — Explore the World, One Journey at a Time",
+  title: "TripMate - Budget Travel Planner",
   description:
-    "Our travel agency offers personalized and hassle-free travel experiences, tailored to meet your unique preferences and needs.",
+    "Plan budget-based trips, collaborate with groups, split expenses, and share live location updates.",
 };
 
 export default function RootLayout({
@@ -30,14 +16,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${syne.variable} ${spaceGrotesk.variable} font-body antialiased bg-bg-primary text-text-primary`}
-      >
-        <ToastProvider>
-          <Preloader>
-            <SmoothScrollProvider>{children}</SmoothScrollProvider>
-          </Preloader>
-        </ToastProvider>
+      <body className="bg-kraft font-body text-ink antialiased">
+        <AuthProvider>
+          <MotionShell>{children}</MotionShell>
+        </AuthProvider>
       </body>
     </html>
   );

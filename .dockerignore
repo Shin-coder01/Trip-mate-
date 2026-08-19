@@ -1,0 +1,9 @@
+node_modules
+.next
+.git
+backend/target
+backend
+dev.log
+npm-debug.log
+Dockerfile.frontend
+docker-compose.yml

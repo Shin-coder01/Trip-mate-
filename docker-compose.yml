@@ -1,0 +1,52 @@
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: tripmate
+      MYSQL_USER: tripmate
+      MYSQL_PASSWORD: tripmate
+      MYSQL_ROOT_PASSWORD: tripmate_root
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-utripmate", "-ptripmate"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  backend:
+    build:
+      context: ./backend
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_PORT: 3306
+      MYSQL_DATABASE: tripmate
+      MYSQL_USER: tripmate
+      MYSQL_PASSWORD: tripmate
+      JWT_SECRET: change-this-local-tripmate-secret
+      CORS_ALLOWED_ORIGINS: http://localhost:3000,http://127.0.0.1:3000
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        NEXT_PUBLIC_API_BASE_URL: http://localhost:8080/api
+        NEXT_PUBLIC_WS_BASE_URL: ws://localhost:8080/ws-trips
+    environment:
+      NEXT_PUBLIC_API_BASE_URL: http://localhost:8080/api
+      NEXT_PUBLIC_WS_BASE_URL: ws://localhost:8080/ws-trips
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  mysql_data:

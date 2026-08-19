@@ -1,36 +1,84 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# TripMate
 
-## Getting Started
+TripMate is a full-stack budget-based travel planning platform built from the `alagappan567/travel-agency` Next.js codebase and extended with a Spring Boot backend.
 
-First, run the development server:
+Stage 1 is complete here: structure, routes, typography hierarchy, protected frontend flows, backend/API wiring, MySQL schema, seed data, and Docker Compose. Animation and final visual polish are intentionally reserved for later stages.
+
+## Stack
+
+- Frontend: Next.js App Router, React, Tailwind CSS
+- Backend: Spring Boot, Spring Security, JWT, WebSocket STOMP
+- Database: MySQL
+- Design direction: vintage boarding-pass / travel-ticket aesthetic using kraft paper, stamp-red accents, serif headlines, and monospace data labels
+
+## Core Features
+
+- JWT auth: `POST /api/auth/register`, `POST /api/auth/login`, `GET /api/auth/me`
+- Budget planner: `POST /api/planner/suggestions`
+- Trips: create, list, join by invite code, view details
+- Shared itinerary: add, update, delete trip itinerary items
+- Expenses: log expenses and calculate simplified settlements
+- Live mode: STOMP WebSocket room per trip at `/ws-trips`
+- Seed data: 6 destinations with day-by-day itinerary templates
+
+## Local Setup
+
+### Docker
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+docker compose up --build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Frontend: http://localhost:3000
+- Backend API: http://localhost:8080/api
+- MySQL: localhost:3306, database `tripmate`, user `tripmate`, password `tripmate`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Manual Development
 
-## Learn More
+Start MySQL first with a `tripmate` database and matching credentials, or update `backend/src/main/resources/application.yml`.
 
-To learn more about Next.js, take a look at the following resources:
+Backend:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+cd backend
+mvn spring-boot:run
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Frontend:
 
-## Deploy on Vercel
+```bash
+npm install
+npm run dev
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The frontend expects:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8080/api
+NEXT_PUBLIC_WS_BASE_URL=ws://localhost:8080/ws-trips
+```
+
+## Frontend Routes
+
+- `/` landing and product entry
+- `/register` create account
+- `/login` authenticate
+- `/planner` protected budget planner
+- `/trips` protected trip dashboard
+- `/trips/[id]` protected shared trip room
+- `/invite/[code]` protected invite join flow
+
+## Backend Layout
+
+- `domain`: normalized JPA entities for users, trips, trip members, destinations, itinerary items, expenses, and splits
+- `repository`: Spring Data repositories
+- `service`: auth, planner, trip collaboration, and expense settlement logic
+- `web`: REST controllers and STOMP location controller
+- `resources/schema.sql`: MySQL table definitions with foreign keys
+- `resources/data.sql`: destination and itinerary seed data
+
+## Notes
+
+The cloned repo's GSAP, Framer Motion, Lenis, Three.js/canvas hero assets, and gallery components are left in place for Stage 2. They are not mounted in Stage 1 so the first pass remains focused on structure and backend functionality.
