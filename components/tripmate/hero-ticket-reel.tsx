@@ -1,43 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef } from "react";
-import HeroScrollCanvas from "@/components/hero-scroll-canvas";
-import { ScrollTrigger } from "@/lib/gsap-config";
+import dynamic from "next/dynamic";
 
 const ROUTES = ["GOI", "MUN", "JAI", "RSH", "PNY", "HMP"];
 
+const DunaLandscapeBackground = dynamic(
+  () => import("@/components/tripmate/duna-landscape-background"),
+  { ssr: false },
+);
+
 export default function HeroTicketReel() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const progressRef = useRef(0);
-
-  useEffect(() => {
-    const section = sectionRef.current;
-    if (!section) return;
-
-    const trigger = ScrollTrigger.create({
-      trigger: section,
-      start: "top top",
-      end: "bottom top",
-      scrub: true,
-      onUpdate: (self) => {
-        progressRef.current = self.progress;
-        window.dispatchEvent(new CustomEvent("tripmate-hero-progress", { detail: self.progress }));
-      },
-    });
-
-    return () => trigger.kill();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       className="relative min-h-[calc(100vh-73px)] overflow-hidden border-b border-ticket-line"
     >
-      <div className="absolute inset-0 opacity-[0.22]">
-        <HeroScrollCanvas progressRef={progressRef} className="h-full w-full" />
-      </div>
-      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(236,228,211,0.98)_0%,rgba(236,228,211,0.9)_48%,rgba(236,228,211,0.55)_100%)]" />
+      <DunaLandscapeBackground />
+      <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(243,246,250,0.28)_0%,rgba(243,246,250,0.12)_52%,rgba(243,246,250,0.06)_100%)]" />
 
       <div className="relative mx-auto grid min-h-[calc(100vh-73px)] max-w-7xl gap-10 px-4 py-12 md:grid-cols-[1.02fr_0.98fr] md:px-6 md:py-16">
         <div className="flex flex-col justify-center" data-reveal>
@@ -60,13 +39,13 @@ export default function HeroTicketReel() {
         </div>
 
         <div className="flex items-center" data-reveal>
-          <div className="ticket-panel ticket-panel-large w-full p-6 md:p-8" data-scan>
+          <div className="ticket-panel ticket-panel-large ticket-stub w-full p-6 md:p-8" data-scan>
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="route-label">Boarding pass</p>
                 <p className="mt-2 font-display text-3xl font-bold">Budget Manifest</p>
               </div>
-              <span className="stamp-mark rotate-[-7deg]">READY</span>
+              <span className="stamp-mark">READY</span>
             </div>
 
             <div className="ticket-divider my-6" />
